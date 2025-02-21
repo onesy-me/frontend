@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { exec } = require('child_process');
@@ -19,7 +20,9 @@ const envKeys = Object.keys(process.env)
     result[`process.env.${key}`] = JSON.stringify(process.env[key]);
 
     return result;
-  }, {});
+  }, {
+    'process.env.PUBLIC_URL': "''"
+  });
 
 class Plugins {
 
@@ -65,11 +68,37 @@ class Plugins {
   }
 }
 
+class CopyWebpackPlugin {
+
+  apply(compiler) {
+    compiler.hooks.done.tap('MovePublicFilesPlugin', () => {
+      const publicDir = path.resolve(__dirname, 'public');
+      const distDir = path.resolve(__dirname, 'build');
+
+      const ignore = ['index.html'];
+
+      if (fs.existsSync(publicDir)) {
+        fs.readdirSync(publicDir).forEach(file => {
+          if (!ignore.includes(file)) {
+            fs.copyFileSync(path.join(publicDir, file), path.join(distDir, file));
+          }
+        });
+
+        console.log('✅ Moved public files to build');
+      }
+    });
+  }
+
+}
+
 module.exports = {
-  entry: './src/index.tsx',
+  entry: {
+    main: './src/index.tsx',
+    'service-worker': './src/service-worker.js'
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: process.env.PUBLIC_URL || '/',
     clean: true
   },
@@ -101,6 +130,17 @@ module.exports = {
       template: './public/index.html'
     }),
     new webpack.DefinePlugin(envKeys),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'public',
+          to: 'build',
+          globOptions: {
+            ignore: ['**/index.html']
+          },
+        },
+      ],
+    }),
     new Plugins()
   ],
   devServer: {

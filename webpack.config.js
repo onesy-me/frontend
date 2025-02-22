@@ -139,7 +139,7 @@ class CopyWebpackPlugin {
           }
         });
 
-        console.log('✅ Moved public folders, files to build');
+        if (isProd) console.log('✅ Moved public folders, files to build');
       }
     });
   }

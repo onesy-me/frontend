@@ -11,7 +11,7 @@
     "dev": "cross-env PORT=1000 webpack serve --no-stats",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start-local": "yarn serve -s ./build -l 1000",
-    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'"
+    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}' --fix"
   },
   "dependencies": {
     "@onesy/style-react": "^1.0.1",
@@ -49,12 +49,14 @@
     "html-webpack-plugin": "^5.6.3",
     "prettier": "^3.5.1",
     "react-dev-utils": "11.0.4",
+    "react-refresh": "^0.16.0",
     "rimraf": "^6.0.1",
     "serve": "^14.2.4",
     "terser-webpack-plugin": "^5.3.11",
     "ts-loader": "^9.5.2",
     "tslint": "^6.1.3",
     "typescript": "^5.7.3",
+    "url": "^0.11.4",
     "url-loader": "^4.1.1",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1",

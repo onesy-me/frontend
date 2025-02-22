@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 const dotenv = require('dotenv');
 const TerserPlugin = require('terser-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 const port = process.env.PORT || 3000;
 
@@ -119,16 +120,17 @@ class Plugins {
 }
 
 class CopyWebpackPlugin {
+
   apply(compiler) {
     compiler.hooks.done.tap('CopyWebpackPlugin', () => {
       const ignore = ['index.html'];
 
       if (fs.existsSync(paths.public)) {
-        fs.readdirSync(paths.public).forEach((file) => {
+        fs.readdirSync(paths.public).forEach(file => {
           const sourcePath = path.join(paths.public, file);
           const destinationPath = path.join(paths.build, file);
 
-          if (ignore.includes(file)) return;
+          if (ignore.includes(file) || file.startsWith('.')) return;
 
           if (fs.statSync(sourcePath).isDirectory()) {
             fs.copySync(sourcePath, destinationPath);
@@ -142,10 +144,8 @@ class CopyWebpackPlugin {
       }
     });
   }
+
 }
-
-module.exports = CopyWebpackPlugin;
-
 
 module.exports = {
   mode: isProd ? 'production' : isDev ? 'development' : 'none',
@@ -186,17 +186,38 @@ module.exports = {
       {
         oneOf: [
           // js 
+          // {
+          //   test: /\.(ts|tsx|js|jsx|mjs)$/,
+          //   exclude: /node_modules/,
+          //   include: paths.src,
+          //   loader: require.resolve('babel-loader'),
+          //   options: {
+          //     customize: require.resolve('babel-preset-react-app/webpack-overrides'),
+          //     cacheDirectory: true,
+          //     cacheCompression: isProd,
+          //     compact: isProd,
+          //     plugins: [
+          //       "react-refresh/babel"
+          //     ]
+          //   }
+          // },
           {
-            test: /\.(ts|tsx|js|jsx|mjs)$/,
-            exclude: /node_modules/,
+            test: /\.(js|jsx|ts|tsx)$/,
             include: paths.src,
-            loader: require.resolve('babel-loader'),
-            options: {
-              customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-              cacheDirectory: true,
-              cacheCompression: isProd,
-              compact: isProd
-            },
+            exclude: /node_modules/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: [
+                  ["@babel/preset-env", { targets: "defaults" }],
+                  ["@babel/preset-react", { runtime: "automatic" }],
+                  "@babel/preset-typescript",
+                ],
+                plugins: [
+                  "react-refresh/babel"
+                ]
+              }
+            }
           },
           // files 
           {
@@ -274,19 +295,11 @@ module.exports = {
     }),
     isProd && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new webpack.DefinePlugin(envKeys),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'public',
-          to: 'build',
-          globOptions: {
-            ignore: ['**/index.html']
-          },
-        },
-      ],
-    }),
+    isDev && new webpack.HotModuleReplacementPlugin(),
+    isDev && new ReactRefreshWebpackPlugin(),
+    new CopyWebpackPlugin(),
     new Plugins()
-  ],
+  ].filter(Boolean),
 
   devServer: {
     static: './build',
@@ -299,6 +312,7 @@ module.exports = {
     },
     compress: true,
     hot: true,
+    liveReload: false,
     historyApiFallback: true
   }
 };

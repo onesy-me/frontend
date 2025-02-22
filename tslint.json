@@ -17,6 +17,7 @@
     "object-literal-shorthand": false,
     "no-unused-expression": "off",
     "prefer-for-of": false,
-    "no-bitwise": false
+    "no-bitwise": false,
+    "no-shadowed-variable": false
   }
 }

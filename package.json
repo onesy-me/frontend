@@ -11,7 +11,7 @@
     "dev": "cross-env PORT=1000 webpack serve --no-stats",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start-local": "yarn serve -s ./build -l 1000",
-    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}' --fix"
+    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@onesy/style-react": "^1.0.1",

@@ -10,15 +10,15 @@ const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"
 
 const port = process.env.PORT || 3000;
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV;
 
-const isDev = ['dev', 'development'].includes(env);
+const isDev = ['dev', 'development', '', undefined].includes(env);
 const isProd = ['prod', 'production'].includes(env);
 
 // Load environment variables from .env* file
 const envs = [];
 
-if ([undefined, '', 'local'].includes(env)) envs.push(path.resolve('./.env.local'));
+if (['local', '', undefined].includes(env)) envs.push(path.resolve('./.env.local'));
 else if (['dev', 'development'].includes(env)) envs.push(
   path.resolve('./.env.dev'),
   path.resolve('./.env.development')
@@ -33,8 +33,8 @@ else if (['test'].includes(env)) envs.push(
 );
 
 // Import environment variable values
-envs.forEach(env => dotenv.config({
-  path: env
+envs.forEach(item => dotenv.config({
+  path: item
 }));
 
 const paths = {
@@ -55,23 +55,23 @@ const REACT_APP = /^REACT_APP_/i;
 
 const envKeysRaw = Object.keys(process.env)
   .filter(key => REACT_APP.test(key))
-  .reduce((env, key) => {
-    env[key] = process.env[key];
+  .reduce((result, key) => {
+    result[key] = process.env[key];
 
-    return env;
+    return result;
   },
     {
-      NODE_ENV: env,
+      NODE_ENV: env || 'development',
       PUBLIC_URL: '',
     }
   );
 
 // Stringify all values so we can feed into Webpack DefinePlugin
 const envKeys = {
-  'process.env': Object.keys(envKeysRaw).reduce((env, key) => {
-    env[key] = JSON.stringify(envKeysRaw[key]);
+  'process.env': Object.keys(envKeysRaw).reduce((result, key) => {
+    result[key] = JSON.stringify(envKeysRaw[key]);
 
-    return env;
+    return result;
   }, {})
 };
 
@@ -185,37 +185,26 @@ module.exports = {
       // other 
       {
         oneOf: [
-          // js 
-          // {
-          //   test: /\.(ts|tsx|js|jsx|mjs)$/,
-          //   exclude: /node_modules/,
-          //   include: paths.src,
-          //   loader: require.resolve('babel-loader'),
-          //   options: {
-          //     customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-          //     cacheDirectory: true,
-          //     cacheCompression: isProd,
-          //     compact: isProd,
-          //     plugins: [
-          //       "react-refresh/babel"
-          //     ]
-          //   }
-          // },
+          // js  
           {
-            test: /\.(js|jsx|ts|tsx)$/,
+            test: /\.(ts|tsx|js|jsx|mjs)$/,
             include: paths.src,
             exclude: /node_modules/,
             use: {
-              loader: "babel-loader",
+              loader: 'babel-loader',
               options: {
+                customize: require.resolve('babel-preset-react-app/webpack-overrides'),
+                cacheDirectory: true,
+                cacheCompression: isProd,
+                compact: isProd,
                 presets: [
-                  ["@babel/preset-env", { targets: "defaults" }],
-                  ["@babel/preset-react", { runtime: "automatic" }],
-                  "@babel/preset-typescript",
+                  ['@babel/preset-env', { targets: 'defaults' }],
+                  ['@babel/preset-react', { runtime: 'automatic' }],
+                  '@babel/preset-typescript',
                 ],
                 plugins: [
-                  "react-refresh/babel"
-                ]
+                  isDev && 'react-refresh/babel'
+                ].filter(Boolean)
               }
             }
           },

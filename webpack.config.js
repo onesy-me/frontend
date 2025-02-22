@@ -11,6 +11,7 @@ const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"
 const port = process.env.PORT || 3000;
 
 const env = process.env.NODE_ENV;
+const envVars = process.env.ENV_VARS || env;
 
 const isDev = ['dev', 'development', '', undefined].includes(env);
 const isProd = ['prod', 'production'].includes(env);
@@ -18,16 +19,16 @@ const isProd = ['prod', 'production'].includes(env);
 // Load environment variables from .env* file
 const envs = [];
 
-if (['local', '', undefined].includes(env)) envs.push(path.resolve('./.env.local'));
-else if (['dev', 'development'].includes(env)) envs.push(
+if (['local', '', undefined].includes(envVars)) envs.push(path.resolve('./.env.local'));
+else if (['dev', 'development'].includes(envVars)) envs.push(
   path.resolve('./.env.dev'),
   path.resolve('./.env.development')
 );
-else if (['prod', 'production'].includes(env)) envs.push(
+else if (['prod', 'production'].includes(envVars)) envs.push(
   path.resolve('./.env.prod'),
   path.resolve('./.env.production')
 );
-else if (['test'].includes(env)) envs.push(
+else if (['test'].includes(envVars)) envs.push(
   path.resolve('./.env.test'),
   path.resolve('./.env.testing')
 );

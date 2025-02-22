@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import ImageExample from 'assets/images/background.jpg';
-import IconExample from 'assets/svg/logo.svg';
+import { ReactComponent as IconExample } from 'assets/svg/logo.svg';
 
 import { style } from '@onesy/style-react';
 import { Line, Reset } from '@onesy/ui-react';

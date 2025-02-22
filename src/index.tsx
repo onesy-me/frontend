@@ -1,8 +1,7 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-import * as sw from './sw';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(
   document.getElementById('onesy-root') as HTMLElement
@@ -10,4 +9,4 @@ const root = ReactDOM.createRoot(
 
 root.render(<App />);
 
-sw.register();
+serviceWorkerRegistration.register();

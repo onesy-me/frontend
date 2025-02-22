@@ -1,9 +1,9 @@
 const path = require('path');
 const fs = require('fs-extra');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { exec } = require('child_process');
+const webpack = require('webpack');
 const dotenv = require('dotenv');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
@@ -66,7 +66,6 @@ const envKeysRaw = Object.keys(process.env)
     }
   );
 
-// Stringify all values so we can feed into Webpack DefinePlugin
 const envKeys = {
   'process.env': Object.keys(envKeysRaw).reduce((result, key) => {
     result[key] = JSON.stringify(envKeysRaw[key]);
@@ -174,7 +173,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|bmp|webp)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'static/media/[name].[hash:8].[ext]',
+          filename: 'static/media/[name].[hash:8].[ext]'
         }
       },
       // svg 
@@ -200,7 +199,7 @@ module.exports = {
                 presets: [
                   ['@babel/preset-env', { targets: 'defaults' }],
                   ['@babel/preset-react', { runtime: 'automatic' }],
-                  '@babel/preset-typescript',
+                  '@babel/preset-typescript'
                 ],
                 plugins: [
                   isDev && 'react-refresh/babel'
@@ -279,7 +278,7 @@ module.exports = {
           minifyJS: true,
           minifyCSS: true,
           minifyURLs: true
-        },
+        }
       })
     }),
     isProd && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),

@@ -284,7 +284,6 @@ module.exports = {
     }),
     isProd && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new webpack.DefinePlugin(envKeys),
-    isDev && new webpack.HotModuleReplacementPlugin(),
     isDev && new ReactRefreshWebpackPlugin(),
     new CopyWebpackPlugin(),
     new Plugins()
@@ -298,6 +297,12 @@ module.exports = {
       overlay: true,
       progress: false,
       logging: 'warn'
+    },
+    watchFiles: {
+      paths: ['src/**/*', 'public/**/*'],
+      options: {
+        ignored: /node_modules/
+      }
     },
     compress: true,
     hot: true,

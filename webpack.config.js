@@ -95,27 +95,30 @@ class Plugins {
       this.invoked++;
     });
 
-    // lint 
-    compiler.hooks.watchRun.tap('LintPlugin', () => {
-      exec(`npx tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'`, (error, message) => {
-        if (error) {
-          console.error('🟡 Lint');
+    // if this is called in dev 
+    // for hot reload, it takes too long to refresh 
+    if (isProd) {
+      // lint, type 
+      compiler.hooks.done.tap('LintTypePlugin', () => {
+        // lint 
+        exec(`npx tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'`, (error, message) => {
+          if (error) {
+            console.error('🟡 Lint');
 
-          console.error(message);
-        }
+            console.error(message);
+          }
+        });
+
+        // type 
+        exec(`npx tsc --noEmit`, (error, message) => {
+          if (error) {
+            console.error('🟠 Types');
+
+            console.error(message);
+          }
+        });
       });
-    });
-
-    // type 
-    compiler.hooks.watchRun.tap('TypePlugin', () => {
-      exec(`npx tsc --noEmit`, (error, message) => {
-        if (error) {
-          console.error('🟠 Types');
-
-          console.error(message);
-        }
-      });
-    });
+    }
   }
 }
 

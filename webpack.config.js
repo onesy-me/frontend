@@ -170,6 +170,10 @@ module.exports = {
 
   devtool: isDev && 'cheap-module-source-map',
 
+  cache: {
+    type: 'filesystem'
+  },
+
   module: {
     rules: [
       // images 
@@ -193,23 +197,26 @@ module.exports = {
             test: /\.(ts|tsx|js|jsx|mjs)$/,
             include: paths.src,
             exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-                cacheDirectory: true,
-                cacheCompression: isProd,
-                compact: isProd,
-                presets: [
-                  ['@babel/preset-env', { targets: 'defaults' }],
-                  ['@babel/preset-react', { runtime: 'automatic' }],
-                  '@babel/preset-typescript'
-                ],
-                plugins: [
-                  isDev && 'react-refresh/babel'
-                ].filter(Boolean)
+            use: [
+              'thread-loader',
+              {
+                loader: 'babel-loader',
+                options: {
+                  customize: require.resolve('babel-preset-react-app/webpack-overrides'),
+                  cacheDirectory: true,
+                  cacheCompression: isProd,
+                  compact: isProd,
+                  presets: [
+                    ['@babel/preset-env', { targets: 'defaults' }],
+                    ['@babel/preset-react', { runtime: 'automatic' }],
+                    '@babel/preset-typescript'
+                  ],
+                  plugins: [
+                    isDev && 'react-refresh/babel'
+                  ].filter(Boolean)
+                }
               }
-            }
+            ]
           },
           // files 
           {
@@ -288,7 +295,7 @@ module.exports = {
     isProd && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new webpack.DefinePlugin(envKeys),
     isDev && new ReactRefreshWebpackPlugin(),
-    new CopyWebpackPlugin(),
+    isProd && new CopyWebpackPlugin(),
     new Plugins()
   ].filter(Boolean),
 
@@ -297,9 +304,9 @@ module.exports = {
     port,
     open: false,
     client: {
-      overlay: true,
+      overlay: false,
       progress: false,
-      logging: 'warn'
+      logging: 'error'
     },
     watchFiles: {
       paths: ['src/**/*', 'public/**/*'],

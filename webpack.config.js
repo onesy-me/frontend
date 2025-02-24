@@ -294,7 +294,9 @@ module.exports = {
     }),
     isProd && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new webpack.DefinePlugin(envKeys),
-    isDev && new ReactRefreshWebpackPlugin(),
+    isDev && new ReactRefreshWebpackPlugin({
+      overlay: false
+    }),
     isProd && new CopyWebpackPlugin(),
     new Plugins()
   ].filter(Boolean),

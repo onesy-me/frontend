@@ -110,11 +110,15 @@ class Plugins {
         });
 
         // type 
-        exec(`npx tsc --noEmit`, (error, message) => {
+        exec(`npx tsc --noEmit --skipLibCheck`, (error, message) => {
           if (error) {
             console.error('🟠 Types');
 
             console.error(message);
+
+            // exit process if 
+            // there are type errors 
+            process.exit(1);
           }
         });
       });

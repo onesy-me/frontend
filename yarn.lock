@@ -1256,10 +1256,10 @@
     "@babel/runtime" "^7.18.3"
     "@onesy/utils" "^1.0.0"
 
-"@onesy/ui-react@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@onesy/ui-react/-/ui-react-1.0.33.tgz#7c5c3d414d32e0ef691a2c05074d4d17fd92583f"
-  integrity sha512-hQG2rtPk37+tf8PIx429k15q9AujjdD4pBmT6NFDojxltN+gZWrXixHhUduD1F4GxhFOvW/jT72Wsra+zzOK3w==
+"@onesy/ui-react@^1.0.35":
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/@onesy/ui-react/-/ui-react-1.0.35.tgz#90221c21f647a59ba0a9f6ab8f5fd29ae10610d7"
+  integrity sha512-lTWb90PEN+zmKGzS2ROM3nHU/HrY/pR9roh5zOe/HsznhKGGNfgNHJLcXSKryClN9WOhxhhyTNGWrwgoysxbCw==
   dependencies:
     "@onesy/date" "^1.0.0"
     "@onesy/errors" "^1.0.0"

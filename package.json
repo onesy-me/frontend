@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@onesy/style-react": "^1.0.1",
-    "@onesy/ui-react": "^1.0.33",
+    "@onesy/ui-react": "^1.0.35",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^7.2.0",

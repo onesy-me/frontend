@@ -47,7 +47,8 @@ const paths = {
 // Dynamically create aliases for all first-level files, subdirectories in 'src/'
 const aliases = fs.readdirSync(paths.src)
   .reduce((result, dir) => {
-    result[dir.replace(/\.(tsx|jsx|ts|js)/g, '')] = path.join(paths.src, dir); // src/ui (folder), src/utils (file) etc. 
+    // src/ui (folder), src/utils (file) etc.
+    result[dir.replace(/\.(tsx|jsx|ts|js)/g, '')] = path.join(paths.src, dir);
 
     return result;
   }, {});
@@ -63,7 +64,7 @@ const envKeysRaw = Object.keys(process.env)
   },
     {
       NODE_ENV: env || 'development',
-      PUBLIC_URL: '',
+      PUBLIC_URL: ''
     }
   );
 

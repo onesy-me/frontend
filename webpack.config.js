@@ -161,6 +161,7 @@ module.exports = {
   entry: {
     main: [
       './src/index.tsx',
+
       isDev && require.resolve('react-dev-utils/webpackHotDevClient')
     ].filter(Boolean),
 
@@ -195,6 +196,13 @@ module.exports = {
       {
         test: /\.svg$/,
         use: '@svgr/webpack'
+      },
+      {
+        test: /service-worker\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env']
+        }
       },
       // other 
       {
@@ -268,7 +276,7 @@ module.exports = {
       chunks: 'all',
       name: false
     },
-    runtimeChunk: true
+    runtimeChunk: 'single'
   },
 
   resolve: {

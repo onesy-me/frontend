@@ -7,10 +7,11 @@
   "private": true,
   "main": "src/index.tsx",
   "scripts": {
-    "dev": "cross-env PORT=1000 webpack serve --no-stats",
+    "local": "cross-env PORT=3000 webpack serve --no-stats",
+    "dev": "cross-env PORT=3000 ENV_VARS=dev webpack serve --no-stats",
     "prebuild": "rimraf ./build",
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "start-local": "cross-env PORT=1000 node ./server",
+    "start-local": "cross-env PORT=3000 node ./server",
     "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {

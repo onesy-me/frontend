@@ -158,17 +158,19 @@ class CopyWebpackPlugin {
 module.exports = {
   mode: isProd ? 'production' : isDev ? 'development' : 'none',
 
-  entry: [
-    './src/index.tsx',
-    './src/service-worker.js',
+  entry: {
+    main: [
+      './src/index.tsx',
+      isDev && require.resolve('react-dev-utils/webpackHotDevClient')
+    ].filter(Boolean),
 
-    isDev && require.resolve('react-dev-utils/webpackHotDevClient')
-  ].filter(Boolean),
+    'service-worker': './src/service-worker.js'
+  },
 
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
-    filename: isProd ? 'static/js/[name].[contenthash:8].js' : isDev && 'static/js/[name].js',
+    filename: pathData => pathData.chunk.name === 'service-worker' ? '[name].js' : isProd ? 'static/js/[name].[contenthash:8].js' : isDev && 'static/js/[name].js',
     chunkFilename: isProd ? 'static/js/[name].[contenthash:8].chunk.js' : isDev && 'static/js/[name].chunk.js',
     clean: true
   },

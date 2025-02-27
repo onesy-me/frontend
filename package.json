@@ -7,8 +7,8 @@
   "private": true,
   "main": "src/index.tsx",
   "scripts": {
-    "prebuild": "rimraf build",
     "dev": "cross-env PORT=1000 webpack serve --no-stats",
+    "prebuild": "rimraf ./build",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start-local": "yarn serve -s ./build -l 1000",
     "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'"

@@ -160,6 +160,9 @@ class CopyWebpackPlugin {
         const buildImagesDir = path.join(paths.build, 'assets', 'images');
 
         const otherAll = [
+          // favicon 
+          { src: path.join(paths.public, 'assets', 'favicon'), build: path.join(paths.build, 'assets', 'favicon') },
+          // svg 
           { src: path.join(paths.public, 'assets', 'svg'), build: path.join(paths.build, 'assets', 'svg') }
         ];
 

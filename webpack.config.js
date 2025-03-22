@@ -128,12 +128,14 @@ class Plugins {
 }
 
 class CopyWebpackPlugin {
-
   apply(compiler) {
     compiler.hooks.done.tap('CopyWebpackPlugin', () => {
       const ignore = ['index.html'];
 
-      if (fs.existsSync(paths.public)) {
+      if (!fs.existsSync(paths.public)) return;
+
+      // production 
+      if (isProd) {
         fs.readdirSync(paths.public).forEach(file => {
           const sourcePath = path.join(paths.public, file);
           const destinationPath = path.join(paths.build, file);
@@ -150,9 +152,40 @@ class CopyWebpackPlugin {
 
         if (isProd) console.log('✅ Moved public folders, files to build');
       }
+      // development
+      else {
+        // In development: Copy only direct image files from /public/assets/images
+        const imagesDir = path.join(paths.public, 'assets', 'images');
+
+        const buildImagesDir = path.join(paths.build, 'assets', 'images');
+
+        const otherAll = [
+          { src: path.join(paths.public, 'assets', 'svg'), build: path.join(paths.build, 'assets', 'svg') }
+        ];
+
+        // Copy direct files from /images
+        if (fs.existsSync(imagesDir)) {
+          fs.ensureDirSync(buildImagesDir);
+
+          fs.readdirSync(imagesDir).forEach(file => {
+            const filePath = path.join(imagesDir, file);
+            const destPath = path.join(buildImagesDir, file);
+
+            if (fs.statSync(filePath).isFile()) {
+              fs.copyFileSync(filePath, destPath);
+            }
+          });
+        }
+
+        // copy all from item src to item build 
+        otherAll.forEach(item => {
+          if (fs.existsSync(item.src)) {
+            fs.copySync(item.src, item.build);
+          }
+        });
+      }
     });
   }
-
 }
 
 module.exports = {
@@ -312,7 +345,7 @@ module.exports = {
     isDev && new ReactRefreshWebpackPlugin({
       overlay: false
     }),
-    isProd && new CopyWebpackPlugin(),
+    new CopyWebpackPlugin(),
     new Plugins()
   ].filter(Boolean),
 

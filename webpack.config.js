@@ -150,42 +150,7 @@ class CopyWebpackPlugin {
           }
         });
 
-        if (isProd) console.log('✅ Moved public folders, files to build');
-      }
-      // development
-      else {
-        // In development: Copy only direct image files from /public/assets/images
-        const imagesDir = path.join(paths.public, 'assets', 'images');
-
-        const buildImagesDir = path.join(paths.build, 'assets', 'images');
-
-        const otherAll = [
-          // favicon 
-          { src: path.join(paths.public, 'assets', 'favicon'), build: path.join(paths.build, 'assets', 'favicon') },
-          // svg 
-          { src: path.join(paths.public, 'assets', 'svg'), build: path.join(paths.build, 'assets', 'svg') }
-        ];
-
-        // Copy direct files from /images
-        if (fs.existsSync(imagesDir)) {
-          fs.ensureDirSync(buildImagesDir);
-
-          fs.readdirSync(imagesDir).forEach(file => {
-            const filePath = path.join(imagesDir, file);
-            const destPath = path.join(buildImagesDir, file);
-
-            if (fs.statSync(filePath).isFile()) {
-              fs.copyFileSync(filePath, destPath);
-            }
-          });
-        }
-
-        // copy all from item src to item build 
-        otherAll.forEach(item => {
-          if (fs.existsSync(item.src)) {
-            fs.copySync(item.src, item.build);
-          }
-        });
+        console.log('✅ Moved public folders, files to build');
       }
     });
   }
@@ -353,7 +318,16 @@ module.exports = {
   ].filter(Boolean),
 
   devServer: {
-    static: './build',
+    static: [
+      {
+        directory: path.join(__dirname, 'build'),
+        publicPath: '/'
+      },
+      {
+        directory: path.join(__dirname, 'public'),
+        publicPath: '/'
+      }
+    ],
     port,
     open: false,
     client: {

@@ -2,13 +2,13 @@
 </br>
 </br>
 
-<h1 align='center'>Frotnend</h1>
-
 <p align='center'>
-  Initial frontend folders, files 
+  <a target='_blank' rel='noopener noreferrer' href='#'>
+    <img width='auto' height='84' src='https://raw.githubusercontent.com/onesy-me/onesy/refs/heads/main/utils/images/logo.png' alt='onesy logo' />
+  </a>
 </p>
 
-<br />
+<h1 align='center'>Frotnend</h1>
 
 <br />
 

@@ -2,7 +2,7 @@
   "name": "@onesy/frontend",
   "version": "1.0.0",
   "description": "Frontend setup for a React app",
-  "author": "Lazar Eric <lazareric.com@gmail.com>",
+  "author": "Lazar Erić <lazareric1@proton.me>",
   "license": "MIT",
   "private": true,
   "main": "src/index.tsx",

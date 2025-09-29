@@ -8,7 +8,7 @@
   </a>
 </p>
 
-<h1 align='center'>Frotnend</h1>
+<h1 align='center'>Frontend</h1>
 
 <br />
 

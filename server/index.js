@@ -59,13 +59,8 @@ const run = async () => {
 
         res.setHeader('Content-Type', mimeType);
 
-        console.log('Serving', pathname, mimeType, requestedFilePath);
-
         return res.status(200).sendFile(requestedFilePath);
       }
-
-      // not found 
-      console.error('No file', pathname);
 
       return res.status(404).send('File not found');
     }
